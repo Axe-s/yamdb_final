@@ -7,11 +7,8 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -19,23 +16,13 @@ from reviews.models import Category, Genre, Review, Title, User
 
 from .filters import TitleFilters
 from .mixins import MixinForMainModels
-from .permissions import (
-    AdminOnly,
-    AdminOrReadOnly,
-    IsAuthorOrHasRightsOrReadOnly,
-)
-from .serializers import (
-    CategoriesSerializer,
-    CommentsSerializer,
-    GenresSerializer,
-    GetTokenSerializer,
-    NotAdminSerializer,
-    ReviewSerializer,
-    SignUpSerializer,
-    TitleCreateSerializer,
-    TitlesReadSerializer,
-    UsersSerializer,
-)
+from .permissions import (AdminOnly, AdminOrReadOnly,
+                          IsAuthorOrHasRightsOrReadOnly)
+from .serializers import (CategoriesSerializer, CommentsSerializer,
+                          GenresSerializer, GetTokenSerializer,
+                          NotAdminSerializer, ReviewSerializer,
+                          SignUpSerializer, TitleCreateSerializer,
+                          TitlesReadSerializer, UsersSerializer)
 
 
 class UsersViewSet(viewsets.ModelViewSet):
@@ -201,8 +188,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title = get_object_or_404(Title, id=self.kwargs.get("title_id"))
-        new_queryset = title.reviews.all()
-        return new_queryset
+        return title.reviews.all()
 
     def perform_create(self, serializer):
         title = get_object_or_404(Title, id=self.kwargs.get("title_id"))
@@ -224,8 +210,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
             title=self.kwargs.get("title_id"),
             id=self.kwargs.get("review_id"),
         )
-        new_queryset = review.comments.all()
-        return new_queryset
+        return review.comments.all()
 
     def perform_create(self, serializer):
         author = get_object_or_404(User, username=self.request.user)
