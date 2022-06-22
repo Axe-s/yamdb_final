@@ -3,13 +3,15 @@ FROM python:3.7-slim
 #Без этого не устанавливается psycopg2-binary==2.8.6 на мой пк
 RUN apt-get update && apt-get -y install libpq-dev gcc
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY requirements.txt .
-
-RUN pip3 install -r requirements.txt
+# COPY requirements.txt .
 
 COPY . .
+
+RUN pip3 install -r api_yamdb/requirements.txt --no-cache-dir
+
+# COPY . .
 
 CMD ["gunicorn", "api_yamdb.wsgi:application", "--bind", "0:8000" ]
 
