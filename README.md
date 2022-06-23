@@ -30,6 +30,10 @@ docker-compose exec web python manage.py collectstatic
 ```
 http://localhost/redoc/
 ```
+### Документация на Яндекс Облаке доступна по адресу:
+```
+http://84.252.140.235/redoc/
+```
 ***
 ### Авторы проекта:
 
