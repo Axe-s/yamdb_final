@@ -1,4 +1,4 @@
-!(https://github.com/Axe-s/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![yamdb_workflow](https://github.com/Axe-s/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 # API для проекта api_yamdb
 Проект призван собирать отзывы и оценки на различные произведения
