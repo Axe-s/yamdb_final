@@ -10,23 +10,23 @@ jobs:
         python-version: ["3.7", "3.8", "3.9"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: | 
-        python -m pip install --upgrade pip 
-        pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-        pip install -r api_yamdb/requirements.txt
+      - name: Install dependencies
+        run: | 
+          python -m pip install --upgrade pip 
+          pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
+          pip install -r api_yamdb/requirements.txt
 
-    - name: Test with flake8 and django tests
-      run: |
-        python -m flake8
-        pytest
-        python api_yamdb/manage.py test
+      - name: Test with flake8 and django tests
+        run: |
+          python -m flake8
+          pytest
+          python api_yamdb/manage.py test
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -64,14 +64,26 @@ jobs:
           script: |
             sudo docker compose stop
             sudo docker compose rm web
-            touch .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
-            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker compose up -d   
+      - name: Create_envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DB_ENGINE: "123456abcdef"
+          envkey_DB_NAME: ${{ secrets.DB_NAME }}
+          envkey_POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          envkey_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          nvkey_DB_HOST: ${{ secrets.DB_HOST }}
+          nvkey_DB_PORT: ${{ secrets.DB_PORT }}
+          file_name: .env
+            # touch .env
+            # echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
+            # echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            # echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            # echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            # echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            # echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+    - name: Docker_compose_up
+      run: sudo docker compose up -d 
+            # sudo docker compose up -d   
 
   send_message:
     runs-on: ubuntu-latest
